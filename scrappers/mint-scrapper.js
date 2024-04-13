@@ -25,8 +25,6 @@ async function scrapeHeadlines(targetUrl) {
       headlines.push({ title, updatedAt, paragraph, source });
     });
 
-    // console.log("Scraped Headlines:");
-
     const final = { isFinished: headlines.length == 0, headlines };
 
     return final;
@@ -37,7 +35,7 @@ async function scrapeHeadlines(targetUrl) {
 
 // scrapeHeadlines();
 
-module.exports = (async function scrapMintMarketNews() {
+async function scrapMintMarketNews() {
   let pageNo = 1;
 
   while (true) {
@@ -56,4 +54,24 @@ module.exports = (async function scrapMintMarketNews() {
   }
 
   return true;
-});
+}
+
+async function scrapMintSinglePage() {
+  let pageNo = 1;
+
+  let targetUrl = `https://www.livemint.com/listing/subsection/market~stock-market-news/${pageNo}`;
+
+  console.log(`Scraping livemint-stocks-news page ${pageNo}`);
+  const currentPageData = await scrapeHeadlines(targetUrl);
+  // pushing the scraped data to the database
+  const result = await HeadlinesModel.insertMany(currentPageData.headlines);
+
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  return true;
+}
+
+module.exports = {
+  scrapMintMarketNews,
+  scrapMintSinglePage,
+};

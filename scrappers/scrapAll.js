@@ -1,6 +1,6 @@
 // importing scrapper functions and calling them
-const scrapBusinessTodayMarketNews = require("./bt-scrapper");
-const scrapMintMarketNews = require("./mint-scrapper");
+const {scrapBusinessTodayMarketNews} = require("./bt-scrapper");
+const {scrapMintMarketNews} = require("./mint-scrapper");
 
 
 module.exports = async function scrapAll() {

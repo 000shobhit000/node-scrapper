@@ -24,7 +24,6 @@ async function scrapeHeadlines(targetUrl) {
       headlines.push({ title, updatedAt, paragraph, source });
     });
 
-    // console.log("Scraped Headlines:");
     const final = { isFinished: headlines.length == 0, headlines };
 
     return final;
@@ -35,7 +34,7 @@ async function scrapeHeadlines(targetUrl) {
 
 // scrapeHeadlines();
 
-module.exports = async function scrapBusinessTodayMarketNews() {
+async function scrapBusinessTodayMarketNews() {
   let pageNo = 1;
 
   while (true) {
@@ -54,4 +53,24 @@ module.exports = async function scrapBusinessTodayMarketNews() {
   }
 
   return true;
+}
+
+async function scrapBtSinglePage() {
+  let pageNo = 1;
+
+  let targetUrl = `https://www.businesstoday.in/ajax/load-more-widget?id=${pageNo}&type=story/photo_gallery/video/breaking_news&path=/markets/company-stock`;
+
+  console.log(`Scraping bt-stocks-news page ${pageNo}`);
+  const currentPageData = await scrapeHeadlines(targetUrl);
+  // pushing the scraped data to the database
+  const result = await HeadlinesModel.insertMany(currentPageData.headlines);
+
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  return true;
+}
+
+module.exports = {
+  scrapBusinessTodayMarketNews,
+  scrapBtSinglePage,
 }
