@@ -37,7 +37,10 @@ app.use(express.json({ limit: "5mb" }));
 app.enable("trust proxy");
 
 // calling scrapAll function to start the scrapers.
-require("./scrappers/scrapAll")();
+// require("./scrappers/scrapAll")();
+
+// calling cron-tab for schduled daily one page scrapping.
+require("./cron-tab");
 
 app.use((error, req, res, next) => {
   if (error) {
